@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_long_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Enter Long URL" />
+
+    <EditText
+        android:id="@+id/et_url_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_long_url"
+        android:layout_marginTop="16dp"
+        android:hint="URL Name"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/btn_save_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_url_name"
+        android:layout_marginTop="16dp"
+        android:text="Save URL" />
+
+    <TextView
+        android:id="@+id/tv_current_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_save_url"
+        android:layout_marginTop="16dp"
+        android:text="Current Location: "
+        android:visibility="gone"/>
+
+    <!-- Optional: TextView to display popup message -->
+    <TextView
+        android:id="@+id/tv_popup_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="URL saved successfully!"
+        android:textColor="@android:color/holo_green_dark"
+        android:visibility="gone"/>
+
+</RelativeLayout>

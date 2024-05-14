@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/doodle">
+
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Developed By:"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mohamed Nashath"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_below="@id/textViewName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewSocialMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Follow me on social media:"
+        android:textSize="18sp"
+        android:layout_below="@id/textViewName2"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewTwitter2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSocialMedia"
+        android:layout_marginTop="132dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Linkedin: https://www.linkedin.com/in/mohamed-nashath-27a9142b6/ " />
+
+
+    <TextView
+        android:id="@+id/textViewTwitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Twitter: https://x.com/NashathM?t=crEae1kwCL2M0j6MLFdVfws=09"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:layout_below="@id/textViewSocialMedia"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewTwitter"
+        android:layout_marginTop="8dp"  android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Facebook: https://www.facebook.com/profile.php?id=100009394519222" />
+
+    <TextView
+        android:id="@+id/textViewGithub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFacebook"
+        android:layout_marginTop="8dp"  android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Github: https://github.com/nashgithub1"  />
+
+</RelativeLayout>

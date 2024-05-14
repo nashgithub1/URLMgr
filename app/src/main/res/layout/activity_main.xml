@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/doodle">
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/tv_welcome_message2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="URL Shortener"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"/>
+
+    <TextView
+        android:id="@+id/tv_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select an option:"
+        android:textSize="20dp"
+        android:layout_below="@id/tv_welcome_message2"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_instructions"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <Button
+            android:id="@+id/btn_create_short_url"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/ic_launcher_background"
+            android:text="Create New Short URL" />
+
+        <Button
+            android:id="@+id/btn_view_my_urls"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/doodle"
+            android:text="View My URLs" />
+
+        <Button
+            android:id="@+id/btn_developer_info"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/doodle"
+            android:text="Developer Info" />
+
+        <Button
+            android:id="@+id/btn_exit_app"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/doodle"
+            android:text="Exit App" />
+
+    </GridLayout>
+
+</RelativeLayout>
