@@ -25,7 +25,8 @@ public class ViewUrlsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         databaseHelper = new DatabaseHelper(this); // Initialize the DatabaseHelper
-        urlsList = databaseHelper.getAllUrls(); // Get the list of URLs
+//        urlsList = databaseHelper.getAllUrls(); // Get the list of URLs
+        urlsList = new ArrayList<>(); // Initialize the list
         urlAdapter = new UrlAdapter(this, urlsList);
         recyclerView.setAdapter(urlAdapter);
 
