@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://api-ssl.bitly.com/v4/";
+    private static final String BASE_URL = "https://api.tinyurl.com/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
@@ -17,7 +17,7 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    public static BitlyApi getBitlyApi() {
-        return getRetrofitInstance().create(BitlyApi.class);
+    public static TinyUrlApi getTinyUrlApi() {
+        return getRetrofitInstance().create(TinyUrlApi.class);
     }
 }
