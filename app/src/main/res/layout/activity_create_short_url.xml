@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/et_url_name"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         android:text="Save URL" />
 
     <TextView

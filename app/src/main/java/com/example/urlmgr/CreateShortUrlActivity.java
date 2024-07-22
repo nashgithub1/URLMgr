@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -101,21 +101,37 @@ public class CreateShortUrlActivity extends AppCompatActivity {
         Call<ShortenResponse> call = bitlyApi.shortenUrl(shortenRequest);
 
         call.enqueue(new Callback<ShortenResponse>() {
+
             @Override
             public void onResponse(@NonNull Call<ShortenResponse> call, @NonNull Response<ShortenResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String shortUrl = response.body().getLink();
+
+////                    String shortUrl = response.body().getLink();
+//                    String shortUrl= "mock";
+//                    long rowId = databaseHelper.insertUrl(urlName, longUrl, shortUrl, location);
+//
+//                    if (rowId != -1) {
+//                        Toast.makeText(CreateShortUrlActivity.this, "URL saved successfully!", Toast.LENGTH_SHORT).show();
+//                    } else {
+////                        Log.e("CreateShortUrlActivity", "Failed to save URL. Name: " + urlName + ", Long URL: " + longUrl + ", Short URL: " + shortUrl + ", Location: " + location);
+//                        Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+                    //                    String shortUrl = response.body().getLink();
+                    Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
+
+                    } else {
+//                        Log.e("CreateShortUrlActivity", "Failed to save URL. Name: " + urlName + ", Long URL: " + longUrl + ", Short URL: " + shortUrl + ", Location: " + location);
+                    String shortUrl= "mock";
                     long rowId = databaseHelper.insertUrl(urlName, longUrl, shortUrl, location);
 
                     if (rowId != -1) {
                         Toast.makeText(CreateShortUrlActivity.this, "URL saved successfully!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(CreateShortUrlActivity.this, "Failed to shorten URL", Toast.LENGTH_SHORT).show();
+                }
                 }
             }
+
 
             @Override
             public void onFailure(@NonNull Call<ShortenResponse> call, @NonNull Throwable t) {

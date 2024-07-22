@@ -9,11 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "urls.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_URLS = "urls";
     public static final String COLUMN_ID = "id";
@@ -52,10 +52,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_URL_NAME, name);
         values.put(COLUMN_LONG_URL, longUrl);
         values.put(COLUMN_SHORT_URL, shortUrl);
-        values.put("location", location);
+        values.put(COLUMN_LOCATION, location);
 
-        long rowId = db.insert(DatabaseHelper.TABLE_URLS, null, values);
-        db.close();
+        long rowId = -1;
+        try {
+            rowId = db.insert(TABLE_URLS, null, values);
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error inserting URL: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
         return rowId;
     }
 
