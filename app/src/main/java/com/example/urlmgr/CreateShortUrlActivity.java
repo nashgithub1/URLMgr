@@ -1,6 +1,5 @@
 package com.example.urlmgr;
 
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -12,12 +11,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
+import java.io.IOException;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -96,46 +96,50 @@ public class CreateShortUrlActivity extends AppCompatActivity {
     }
 
     private void shortenUrl(String longUrl, String urlName, String location) {
-        BitlyApi bitlyApi = RetrofitClient.getRetrofitInstance().create(BitlyApi.class);
-        ShortenRequest shortenRequest = new ShortenRequest(longUrl);
-        Call<ShortenResponse> call = bitlyApi.shortenUrl(shortenRequest);
+        TinyUrlApi tinyUrlApi = RetrofitClient.getTinyUrlApi();
+        TinyUrlRequest tinyUrlRequest = new TinyUrlRequest(longUrl);
+        Call<TinyUrlResponse> call = tinyUrlApi.shortenUrl(tinyUrlRequest);
 
-        call.enqueue(new Callback<ShortenResponse>() {
+        Log.d("API Debug", "Sending request to TinyURL API");
+        Log.d("API Debug", "Long URL: " + longUrl);
 
+        call.enqueue(new Callback<TinyUrlResponse>() {
             @Override
-            public void onResponse(@NonNull Call<ShortenResponse> call, @NonNull Response<ShortenResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onResponse(@NonNull Call<TinyUrlResponse> call, @NonNull Response<TinyUrlResponse> response) {
+                Log.d("API Debug", "Received response from TinyURL API");
+                Log.d("API Debug", "Response Code: " + response.code());
 
-////                    String shortUrl = response.body().getLink();
-//                    String shortUrl= "mock";
-//                    long rowId = databaseHelper.insertUrl(urlName, longUrl, shortUrl, location);
-//
-//                    if (rowId != -1) {
-//                        Toast.makeText(CreateShortUrlActivity.this, "URL saved successfully!", Toast.LENGTH_SHORT).show();
-//                    } else {
-////                        Log.e("CreateShortUrlActivity", "Failed to save URL. Name: " + urlName + ", Long URL: " + longUrl + ", Short URL: " + shortUrl + ", Location: " + location);
-//                        Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-                    //                    String shortUrl = response.body().getLink();
-                    Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    String shortUrl = response.body().getData().getTinyUrl();
+                    Log.d("API Debug", "Shortened URL: " + shortUrl);
 
-                    } else {
-//                        Log.e("CreateShortUrlActivity", "Failed to save URL. Name: " + urlName + ", Long URL: " + longUrl + ", Short URL: " + shortUrl + ", Location: " + location);
-                    String shortUrl= "mock";
                     long rowId = databaseHelper.insertUrl(urlName, longUrl, shortUrl, location);
 
                     if (rowId != -1) {
                         Toast.makeText(CreateShortUrlActivity.this, "URL saved successfully!", Toast.LENGTH_SHORT).show();
-                }
+                    } else {
+                        Log.e("API Error", "Failed to save URL to database");
+                        Toast.makeText(CreateShortUrlActivity.this, "Failed to save URL", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Log.e("API Error", "Response not successful. Code: " + response.code());
+                    if (response.errorBody() != null) {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            Log.e("API Error", "Error Body: " + errorBody);
+                        } catch (IOException e) {
+                            Log.e("API Error", "Error reading error body: " + e.getMessage());
+                        }
+                    }
+                    Toast.makeText(CreateShortUrlActivity.this, "Failed to shorten URL", Toast.LENGTH_SHORT).show();
                 }
             }
 
-
             @Override
-            public void onFailure(@NonNull Call<ShortenResponse> call, @NonNull Throwable t) {
-                Toast.makeText(CreateShortUrlActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<TinyUrlResponse> call, @NonNull Throwable t) {
+                Log.e("API Error", "Network Failure: " + t.getMessage());
+                Log.e("API Error", "Stack trace: " + Log.getStackTraceString(t));
+                Toast.makeText(CreateShortUrlActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,4 +170,3 @@ public class CreateShortUrlActivity extends AppCompatActivity {
         }
     }
 }
-
