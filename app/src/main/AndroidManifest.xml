@@ -17,34 +17,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.URLMgr"
         tools:targetApi="31">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
 
-        <activity android:name=".CreateShortUrlActivity">
+        <activity
+            android:name=".CreateShortUrlActivity"
+            android:exported="true">
             <!-- Optional: Intent filters, configuration options, etc. -->
         </activity>
 
-        <activity android:name=".ViewUrlsActivity">
+        <activity
+            android:name=".ViewUrlsActivity"
+            android:exported="true">
             <!-- Optional: Intent filters, configuration options, etc. -->
         </activity>
 
-        <activity android:name=".DeveloperInfoActivity">
+        <activity
+            android:name=".DeveloperInfoActivity"
+            android:exported="true">
             <!-- Optional: Intent filters, configuration options, etc. -->
         </activity>
 
-        <activity android:name=".DatabaseHelper">
+        <!-- MainActivity is no longer the launcher activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <!-- Optional: Intent filters, configuration options, etc. -->
         </activity>
 
     </application>
-
 </manifest>

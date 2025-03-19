@@ -1,4 +1,3 @@
-
 package com.example.urlmgr;
 
 import android.content.ContentValues;
@@ -6,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Pair;
+import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
-import android.util.Log;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "urls.db";
@@ -19,7 +18,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_URL_NAME = "url_name";
     public static final String COLUMN_LONG_URL = "long_url";
-
     public static final String COLUMN_SHORT_URL = "short_url";
     public static final String COLUMN_LOCATION = "location";
 
@@ -75,22 +73,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery("SELECT * FROM " + TABLE_URLS, null);
 
             if (cursor != null && cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndexOrThrow(COLUMN_ID);
                 int nameIndex = cursor.getColumnIndexOrThrow(COLUMN_URL_NAME);
                 int longUrlIndex = cursor.getColumnIndexOrThrow(COLUMN_LONG_URL);
                 int shortUrlIndex = cursor.getColumnIndexOrThrow(COLUMN_SHORT_URL);
                 int locationIndex = cursor.getColumnIndexOrThrow(COLUMN_LOCATION);
 
                 do {
+                    int id = cursor.getInt(idIndex);
                     String name = cursor.getString(nameIndex);
                     String longUrl = cursor.getString(longUrlIndex);
                     String shortUrl = cursor.getString(shortUrlIndex);
                     String location = cursor.getString(locationIndex);
 
-                    urls.add(new UrlItem(name, longUrl, shortUrl, location));
+                    urls.add(new UrlItem(id, name, longUrl, shortUrl, location));
                 } while (cursor.moveToNext());
             }
         } catch (IllegalArgumentException e) {
-            // Handle the case where a column name was not found
             e.printStackTrace();
         } finally {
             if (cursor != null) {
@@ -102,6 +101,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return urls;
     }
 
-
+    public boolean deleteUrl(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete(TABLE_URLS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return rowsDeleted > 0;
+    }
 }
-

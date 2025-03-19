@@ -7,5 +7,4 @@ public class ShortenRequest {
         this.long_url = long_url;
     }
 
-    // Getter and setter if needed
 }

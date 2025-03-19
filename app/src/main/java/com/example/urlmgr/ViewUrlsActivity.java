@@ -5,12 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewUrlsActivity extends AppCompatActivity {
+public class ViewUrlsActivity extends AppCompatActivity implements UrlAdapter.OnDeleteClickListener {
 
     private RecyclerView recyclerView;
     private UrlAdapter urlAdapter;
@@ -24,13 +25,28 @@ public class ViewUrlsActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        databaseHelper = new DatabaseHelper(this); // Initialize the DatabaseHelper
-//        urlsList = databaseHelper.getAllUrls(); // Get the list of URLs
-        urlsList = new ArrayList<>(); // Initialize the list
-        urlAdapter = new UrlAdapter(this, urlsList);
+        databaseHelper = new DatabaseHelper(this);
+        urlsList = new ArrayList<>();
+        urlAdapter = new UrlAdapter(this, urlsList, this);
         recyclerView.setAdapter(urlAdapter);
 
         loadUrls();
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                onDeleteClick(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void loadUrls() {
@@ -38,23 +54,26 @@ public class ViewUrlsActivity extends AppCompatActivity {
         Cursor cursor = null;
         try {
             db = databaseHelper.getReadableDatabase();
-            cursor = db.rawQuery("SELECT " + DatabaseHelper.COLUMN_URL_NAME + ", " + DatabaseHelper.COLUMN_LONG_URL + ", " + DatabaseHelper.COLUMN_SHORT_URL + ", " + DatabaseHelper.COLUMN_LOCATION +
+            cursor = db.rawQuery("SELECT " + DatabaseHelper.COLUMN_ID + ", " + DatabaseHelper.COLUMN_URL_NAME + ", " + DatabaseHelper.COLUMN_LONG_URL + ", " + DatabaseHelper.COLUMN_SHORT_URL + ", " + DatabaseHelper.COLUMN_LOCATION +
                     " FROM " + DatabaseHelper.TABLE_URLS, null);
 
-
             if (cursor != null && cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_ID);
                 int nameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_URL_NAME);
                 int longUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LONG_URL);
                 int shortUrlIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_SHORT_URL);
                 int locationIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_LOCATION);
 
                 do {
+                    int id = cursor.getInt(idIndex);
                     String name = cursor.getString(nameIndex);
                     String longUrl = cursor.getString(longUrlIndex);
-                    String shortUrl = cursor.isNull(shortUrlIndex) ? "" : cursor.getString(shortUrlIndex); // Handle null value for shortUrl
+                    String shortUrl = cursor.isNull(shortUrlIndex) ? "" : cursor.getString(shortUrlIndex);
                     String location = cursor.getString(locationIndex);
-                    urlsList.add(new UrlItem(name, longUrl, shortUrl, location));
+                    urlsList.add(new UrlItem(id, name, longUrl, shortUrl, location));
                 } while (cursor.moveToNext());
+
+                urlAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, "No URLs found", Toast.LENGTH_SHORT).show();
             }
@@ -68,13 +87,18 @@ public class ViewUrlsActivity extends AppCompatActivity {
                 db.close();
             }
         }
+    }
 
-        if (urlsList.isEmpty()) {
-            Toast.makeText(this, "No URLs found", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onDeleteClick(int position) {
+        UrlItem urlItem = urlsList.get(position);
+        boolean isDeleted = databaseHelper.deleteUrl(urlItem.getId());
+        if (isDeleted) {
+            urlsList.remove(position);
+            urlAdapter.notifyItemRemoved(position);
+            Toast.makeText(this, "URL deleted", Toast.LENGTH_SHORT).show();
         } else {
-            urlAdapter = new UrlAdapter(this, urlsList);
-            recyclerView.setAdapter(urlAdapter);
+            Toast.makeText(this, "Failed to delete URL", Toast.LENGTH_SHORT).show();
         }
     }
 }
-

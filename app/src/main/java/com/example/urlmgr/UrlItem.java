@@ -1,6 +1,7 @@
 package com.example.urlmgr;
 
 public class UrlItem {
+    private int id;
     private String name;
     private String longUrl;
     private String shortUrl;
@@ -8,11 +9,16 @@ public class UrlItem {
 
     // Constructor, getters, and setters
 
-    public UrlItem(String name, String longUrl, String shortUrl, String location) {
+    public UrlItem(int id, String name, String longUrl, String shortUrl, String location) {
+        this.id = id;
         this.name = name;
         this.longUrl = longUrl;
         this.shortUrl = shortUrl;
         this.location = location;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -26,6 +32,7 @@ public class UrlItem {
     public String getShortUrl() {
         return shortUrl;
     }
+
     public String getLocation() {
         return location;
     }
